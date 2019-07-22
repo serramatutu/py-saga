@@ -9,7 +9,7 @@ class State(Enum):
 
 class StatefulEntity:
     def __init__(self):
-        self._state = state
+        self._state = State.CREATED
 
     @property
     def state(self):

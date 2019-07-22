@@ -1,7 +1,7 @@
 from abc import abstractmethod, abstractclassmethod
 from pysaga.state import StatefulEntity, State    
 
-class Step(AbstractStep):
+class Step(StatefulEntity):
     """Saga step that runs asynchronously"""
     _step_classes = set()
 
@@ -10,7 +10,7 @@ class Step(AbstractStep):
         Step._step_classes.add(klass)
 
     @staticmethod
-    def from_args(self, *args, **kwargs):
+    def from_args(*args, **kwargs):
         """Tries to instance a Step from args and kwargs.
             Returns: Step if args/kwargs are valid. Returns None otherwise"""
         if len(args) > 0 and isinstance(args[0], Step):

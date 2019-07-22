@@ -1,4 +1,6 @@
 from collections import Sequence
+import asyncio
+
 from pysaga.state import StatefulEntity, State
 from pysaga.step import Step
 
@@ -6,8 +8,7 @@ class Saga(StatefulEntity):
     """A saga is a way to execute complex transactions across distributed systems while
         maintaining eventual consistency.
         
-        Sagas are *asynchronous* by default. If you're executing a saga outside of
-        an event loop, please use the SyncSaga class."""
+        Sagas are *asynchronous* by default."""
 
     def __init__(self, steps=None):
         if steps is None:
@@ -28,5 +29,21 @@ class Saga(StatefulEntity):
             raise ValueError("Could not parse arguments into valid step type")
         self._steps.append(step)
 
-    async def run(self):
-        pass
+    async def run(self, *args, executor=None, **kwargs):       
+        loop = asyncio.get_event_loop()
+        
+        futures = [
+            step.do_run(*args, **kwargs)
+            for step in self._steps
+        ]
+        await asyncio.gather(*futures)
+
+        failure = any([step.failure for step in self._steps])
+        if failure:
+            futures = [
+                step.do_compensate(*args, **kwargs)
+                for step in self._steps if step.success
+            ]
+            await asyncio.gather(*futures)
+        
+        self._state = State.FAILURE if failure else State.SUCCESS
