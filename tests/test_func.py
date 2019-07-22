@@ -61,8 +61,8 @@ class FuncTestCase(unittest.TestCase):
         asyncio.run(saga.run())
 
         self.assertTrue(saga.success)
-        self.assertEquals(self.sync_val, RunStatus.RUN)
-        self.assertEquals(self.async_val, RunStatus.RUN)
+        self.assertEqual(self.sync_val, RunStatus.RUN)
+        self.assertEqual(self.async_val, RunStatus.RUN)
 
     def test_run_compensate(self):
         saga = Saga()
@@ -72,5 +72,5 @@ class FuncTestCase(unittest.TestCase):
         asyncio.run(saga.run())
 
         self.assertTrue(saga.failure)
-        self.assertEquals(self.sync_val, RunStatus.COMPENSATE)
-        self.assertEquals(self.async_val, RunStatus.RUN)
+        self.assertEqual(self.sync_val, RunStatus.COMPENSATE)
+        self.assertEqual(self.async_val, RunStatus.RUN)

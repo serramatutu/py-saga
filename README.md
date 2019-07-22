@@ -1,6 +1,8 @@
 # py-saga
 py-saga is an asynchronous open-source python implementation of the [saga](https://microservices.io/patterns/data/saga.html) pattern.
 
+[![Build Status](https://travis-ci.org/serramatutu/py-saga.svg?branch=master)](https://travis-ci.org/serramatutu/py-saga)
+
 ## What are Sagas?
 [Sagas](https://microservices.io/patterns/data/saga.html) are a way to execute complex transactions across distributed systems while guaranteeing [eventual consistency](https://en.wikipedia.org/wiki/Eventual_consistency).
 
